@@ -1,0 +1,12 @@
+{
+  "name": "sms-verfication",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install" : "npm i bcryptjs body-parser cookie-parser cors dotenv express mongodb mongoose"
+  },
+  "author": "vijay",
+  "license": "ISC"
+}
