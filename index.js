@@ -8,7 +8,7 @@ const path = require("path");
 const cors = require("cors")
 const session = require("express-session");
 const app = express(); 
-
+const passport = require('passport')
 
 const port = process.env.PORT ||5000;
 
@@ -16,6 +16,11 @@ app.use(bodyparser.urlencoded({extended : false}))
 app.use(bodyparser.json());
 
 app.use(helmet());
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use(expressValidator());
 app.use(session({
@@ -30,9 +35,7 @@ app.use(session({
 
 
 app.use(cors());
-app.use("/api/admin",require("./routers/api/auth"));
-app.use("/api/admin/blog",require("./routers/api/blog"));
-app.use("/api/admin/comments",require("./routers/api/comments"));
+app.use("/api/auth",require("./routers/api/auth"));
 
 const db =require("./setup/connect").mongodbURL;
 const s =async()=>{ 
@@ -43,14 +46,46 @@ await mongoose
 }
 s().catch(err => console.log(err))
 
+console.log(process.env.NODE_ENV)
 
-// if( process.env.NODE_ENV === "development"){
-// app.get("/",(req,res)=>{
+
+if(process.env.NODE_ENV !== 'production'){
+    var reqid = null;
+app.get("/",(req,res)=>{
     
-//     res.send("hello");
-// });
+    
+    res.send("hello");
+    
+      
+      
+});
 
-// }
+app.get("/check-code",(req,res)=>{
+
+  res.send(`<html><body><form method="post" action="/verify"><lable>code : </lable><input type="text" name="code"><input type="submit" value="submit"></form></body></html>`)
+
+})
+
+app.post("/verify",(req,res)=>{
+
+  let code = req.body.code;
+  console.log(`code : ${code}\nrequest_id : ${reqid}`)
+  nexmo.verify.check({
+    request_id: reqid,
+    code: code
+  }, (err, result) => {
+    if (err) {
+      console.error(err);
+    } else {
+
+      console.log(result);
+
+    }
+  });
+  
+})
+
+}
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
