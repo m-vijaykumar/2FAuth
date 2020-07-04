@@ -229,20 +229,22 @@ exports.login= (req,res)=>{
 };
 
 exports.logout =(req,res)=>{
+
+    console.log("in logout")
     try {
         req.logOut();
         
         req.session.destroy();
-        
+        // console.log(req.session.verification.id)
         return res.json({
             error:false,
-            msg:""
+            msg:"logout"
         })
     } catch (error) {
-
+        console.log(error)
         return res.json({
             error:true,
-            msg:error
+            msg:"error in logout"
         })
     }
     

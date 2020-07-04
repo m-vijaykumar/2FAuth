@@ -1,7 +1,7 @@
 const mongoose =require("mongoose");
 const bcrypt = require('bcryptjs');
-
-
+var encrypt = require('mongoose-encryption');
+// const secret  = require("../setup/connect").TOKEN_KEY;
 const  Schema = mongoose.Schema;
 const userSchema = new Schema({
 
@@ -55,6 +55,13 @@ const userSchema = new Schema({
     }
     
 })
+
+var encKey = process.env.SOME_32BYTE_BASE64_STRING;
+var sigKey = process.env.SOME_64BYTE_BASE64_STRING;
+var secret  = require("../setup/connect").TOKEN_KEY;
+// userSchema.plugin(encrypt, { encryptionKey: encKey, signingKey: sigKey });
+// userSchema.plugin(encrypt,{ secret: secret });
+
 
 userSchema.pre('save', function(next){
     var user = this;

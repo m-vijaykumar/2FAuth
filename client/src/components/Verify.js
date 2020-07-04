@@ -51,6 +51,36 @@ export default function Verify(props) {
 
     }
 
+    
+ const  signout = async(e)=>{
+
+    // e.preventDefault()
+    try{
+        // e.persist();
+      const resp = await fetch("/api/auth/logout",{
+        method:"DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+    
+        },
+        mode:"cors"
+      });
+      const data = await resp.json();
+          
+           if(data.error === false){
+              
+              props.history.push("/login");
+           }else{
+            setErrMessage(data.msg)
+           }
+      }catch(e){
+          console.log(e);
+          setErrMessage("inernal error")
+        //   props.history.push("/login");
+      }
+
+    }
    const  codeInput = <tr onChange={handleChange}>
                         <td><input type="number" name="code"/> <button onClick={handleSubmit}> Verify</button></td>
                     </tr>
@@ -111,6 +141,7 @@ export default function Verify(props) {
                 setStatus({email : data.status.email , phone :data.status.phone})
              if((data.status.email === true) && (data.status.phone === true) ){
                  alert("verifed ...!")
+                 signout()
                 props.history.push("/dashboard");
 
              }
@@ -175,9 +206,12 @@ export default function Verify(props) {
             </tr>
             {codeBlock ? codeInput : ""}
             </table>
+            
 
             {message}<br/><br/><br/>
-            {errmessage}
+            {errmessage}<br/><br/><br/>
+
+            <button onClick={signout} className="btn btn-primary">Use Another Account</button>
         </div>
     )
 }

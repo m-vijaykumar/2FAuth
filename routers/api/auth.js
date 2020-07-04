@@ -6,7 +6,17 @@ const userController = require("../../controllers/user")
 const tokenHelper = require("../../helpers/sessionVerfiy")
 const passport = require("passport")
 require('../../helpers/googleAuth')
+const User = require("../../models/User")
 
+router.get("/users",async(req,res)=>{
+
+    await User.find({})
+        .then(r=>{
+            console.log(r)
+        }).catch(err=>{
+            console.log(err)
+        })
+})
 // @type    GET
 //@route    /api/auth/register
 // @desc    starting router
@@ -121,6 +131,13 @@ router.post("/getuser", userController.getUser )
 // @desc    starting router
 // @access  PRAVITE 
 
-router.delete("/logout",tokenHelper.sessionVerfiy, userController.logout )
+router.delete("/logout", userController.logout )
+
+// // @type    DELETE
+// //@route    /api/auth/logout
+// // @desc    starting router
+// // @access  PRAVITE 
+
+// router.delete("/logout",tokenHelper.sessionVerfiy, userController.logout )
 
 module.exports =router;
