@@ -10,7 +10,7 @@
     auth: {
       user: process.env.Nodemailer_Username,
       pass: process.env.Nodemailer_Password
-      // pass: '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'
+      '
     }
   }); 
   
